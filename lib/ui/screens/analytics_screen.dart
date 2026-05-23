@@ -8,7 +8,7 @@ import 'package:vaulto/core/utils/currency_formatter.dart';
 import 'package:vaulto/providers/finance_provider.dart';
 import 'package:vaulto/data/models/transaction_model.dart';
 
-enum AnalyticsPeriod { Day, Week, Monqth, Year }
+enum AnalyticsPeriod { Day, Week, Month, Year }
 
 class AnalyticsScreen extends StatefulWidget {
   const AnalyticsScreen({super.key});
