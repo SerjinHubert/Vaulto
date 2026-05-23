@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lucide_icons/lucide_icons.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:vaulto/core/theme/app_colors.dart';
 import 'dashboard_screen.dart';
 import 'add_transaction_screen.dart';
