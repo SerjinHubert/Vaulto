@@ -1,0 +1,60 @@
+name: Build Shorebird Apps (Android & iOS)
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+          
+      - name: Setup Shorebird
+        uses: shorebirdtech/setup-shorebird@v1
+          
+      - name: Shorebird Release Android (APK)
+        run: shorebird release android --artifact apk
+        env:
+          SHOREBIRD_TOKEN: ${{ secrets.SHOREBIRD_TOKEN }}
+          
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Vaulto-Android-APK
+          path: build/app/outputs/apk/release/app-release.apk
+
+  build-ios:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Shorebird
+        uses: shorebirdtech/setup-shorebird@v1
+          
+      - name: Shorebird Release iOS (Unsigned)
+        run: shorebird release ios --no-codesign
+        env:
+          SHOREBIRD_TOKEN: ${{ secrets.SHOREBIRD_TOKEN }}
+          
+      - name: Package into IPA
+        run: |
+          mkdir -p Payload
+          mv build/ios/iphoneos/Runner.app Payload/
+          zip -qq -r Vaulto.ipa Payload
+          
+      - name: Upload IPA Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Vaulto-iOS-IPA
+          path: Vaulto.ipa
